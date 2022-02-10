@@ -1,0 +1,19 @@
+version: '3.3'
+
+services:
+  autotest:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - ${ALLURE_RESULTS}:/app/allure-results
+      - ${AUTOTEST_RESULTS}:/app/cache
+      - ${AUTOTEST_LOGS}:/app/logs
+      - ${LOCALTIME}:/etc/localtime:ro
+    env_file:
+      - ./.env
+
+volumes:
+  autotest-results:
+  allure-results:
+  localtime:
