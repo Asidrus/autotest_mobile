@@ -11,6 +11,8 @@ if os.path.isfile(ENV_LOCAL):
     load_dotenv(ENV_LOCAL)
 
 APPIUM_URL = os.getenv("APPIUM_URL", "http://127.0.0.1:4723/wd/hub")
+APPIUM_IP = os.getenv('APPIUM_IP', '127.0.0.1')
+APPIUM_PORT = os.getenv('APPIUM_PORT', '4723')
 TELEGRAMBOT_IP = os.getenv('TELEGRAMBOT_IP', 'localhost')
 TELEGRAMBOT_PORT = os.getenv('TELEGRAMBOT_PORT', 1234)
 
@@ -20,7 +22,7 @@ logs_path = project_path + "/../logs"
 
 # gather the logs
 today = datetime.now().date()
-fname = autotest_logs + "/" + str(today) + ".log"
+fname = logs_path + "/" + str(today) + ".log"
 if not os.path.exists(fname):
     with open(fname, "w"): pass
 logging.basicConfig(filename=fname,

@@ -3,7 +3,7 @@ from contextlib import contextmanager
 import allure
 from allure_commons.types import AttachmentType
 from libs.network import Client
-# from libs.webdriver import WebDriver
+from libs.driver import WebDriver
 
 
 class Reporter:

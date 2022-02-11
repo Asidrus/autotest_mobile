@@ -1,5 +1,12 @@
 import pytest
 
+from libs.network import Client
+from libs.driver import WebDriver
+from libs.reporter import Reporter
+from config import TELEGRAMBOT_IP, TELEGRAMBOT_PORT
+from config import APPIUM_IP, APPIUM_PORT
+from config import logger
+
 
 def pytest_addoption(parser):
     parser.addoption("--invisible", action='store_true', help="Run on virtual display")
@@ -23,20 +30,18 @@ def isLastTry(reruns, rerunInfo, data):
 @pytest.fixture(scope="session")
 def setupDriver(request):
     opt = lambda o: request.config.getoption(o)
-    # Driver = WebDriver(invisible=opt("--invisible"),
-    #                    adaptive=opt("--adaptive"),
-    #                    remote=not opt("--local"),
-    #                    logs=True,
-    #                    **request.param)
-    # Driver.run()
-    desired_capabilities = {
-        "platformName": "Android",
-        "platformVersion": "12",
-        # "app": "/home/kali/python/autotest_mobile/Система обучения АкадемСити_1.5.2_apkcombo.com.apk",
-        "app": "./Система обучения АкадемСити_1.5.2_apkcombo.com.apk",
-        "automationName": "UiAutomator2",
-        # "appium:udid": "emulator-5556",
-    }
-    Driver = webdriver.Remote("http://127.0.0.1:4723/wd/hub", desired_capabilities=desired_capabilities)
+    params = request.param if request.param is not None else {}
+    Driver = WebDriver(IP=APPIUM_IP, Port=APPIUM_PORT, **params)
+    Driver.run()
     yield Driver
     del Driver
+
+
+@pytest.fixture(scope='function')
+def reporter(request, headers):
+    reporter = Reporter(header=headers,
+                        logger=logger,
+                        telegram=Client(TELEGRAMBOT_IP, TELEGRAMBOT_PORT),
+                        debug=int(request.config.getoption("--fDebug")))
+    yield reporter
+    del reporter
