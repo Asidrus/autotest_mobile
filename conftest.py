@@ -38,9 +38,10 @@ def setupDriver(request):
 
 
 @pytest.fixture(scope='function')
-def reporter(request, headers):
+def reporter(request, headers, setupDriver):
     reporter = Reporter(header=headers,
                         logger=logger,
+                        webdriver=setupDriver,
                         telegram=Client(TELEGRAMBOT_IP, TELEGRAMBOT_PORT),
                         debug=int(request.config.getoption("--fDebug")))
     yield reporter

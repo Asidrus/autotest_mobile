@@ -18,7 +18,7 @@ def pytest_generate_tests(metafunc):
     metafunc.parametrize("headers", [{"Test": test_name}])
     metafunc.parametrize("reruns, rerunInfo", [(reruns, rerunInfo)])
     metafunc.parametrize("setupDriver", [{
-        "app": "./Система обучения АкадемСити_1.5.2_apkcombo.com.apk",
+        "app": "/app/app.apk",
     }], indirect=True)
 
 
@@ -28,7 +28,10 @@ def pytest_generate_tests(metafunc):
 @pytest.mark.flaky(reruns=reruns)
 def test_login(request, setupDriver, reporter, data, isLastTry):
     driver = setupDriver
-    with reporter.allure_step('Инициализация драйвера', True, False, True, isLastTry):
+    with reporter.allure_step('Инициализация драйвера', True, False, True, not isLastTry):
         page = LoginPage(driver)
-    with reporter.allure_step('Вход в личный кабинет', True, False, True, isLastTry):
+        driver.save_screenshot("screen1.png")
+    with reporter.allure_step('Вход в личный кабинет', True, False, True, not isLastTry):
         page.login(SDO_LOGIN, SDO_PASSWORD)
+        driver.save_screenshot("screen2.png")
+        # assert False

@@ -5,7 +5,7 @@ class WebDriver:
     platformName: str
     platformVersion: str
     deviceName: str
-    app: str
+    app: str = './app.apk'
 
     IP: str = '127.0.0.1'
     Port: str = '4723'
@@ -41,10 +41,12 @@ class WebDriver:
     def run(self):
         desired_capabilities = {
             "platformName": "Android",
-            "platformVersion": "11",
-            "app": "/home/kali/python/autotest_mobile/Система обучения АкадемСити_1.5.2_apkcombo.com.apk",
-            # "app": "./Система обучения АкадемСити_1.5.2_apkcombo.com.apk",
+            "platformVersion": "12",
+            "deviceName": "Pixel 5",
+            "app": self.app,
             "automationName": "UiAutomator2",
+            "udid": 'emulator-5554'
         }
         self.driver = webdriver.Remote(f"http://{self.IP}:{self.Port}/wd/hub",
                                        desired_capabilities=desired_capabilities)
+        # self.driver.save_screenshot()
